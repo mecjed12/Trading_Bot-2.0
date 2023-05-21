@@ -31,12 +31,6 @@ namespace DataBase.DataContext.Tables
         [Column("id")]
         public int ItemId { get; set; }
 
-        [Column("tradingPairId")]
-        public int TradingPairId { get; set; }
-
-        [Column("tradingPair")]
-        public TradingPair? TradingPair { get; set; }
-
         [Column("timeStamp")]
         public int TimeStamp { get; set; }
 
@@ -55,10 +49,10 @@ namespace DataBase.DataContext.Tables
         [Column("volume")]
         public decimal Volume { get; set; }
 
-        [Column("listId")]
+        [ForeignKey("listId")]
         public int ListId { get; set; }
 
-        public virtual HistoricalDataList List { get; set; }
+        public virtual HistoricalDataList? List { get; set; }
     }
 }
 

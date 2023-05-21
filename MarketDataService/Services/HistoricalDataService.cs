@@ -33,7 +33,7 @@ namespace MarketDataService.Services
             public string? Period { get; set; }
             public string? Description { get; set; }
             public string? Pair { get; set; }
-            public List<OhlcData>? Data { get; set; }
+            public List<OhlcData>? Ohlc { get; set; }
         }
 
         public class DataResponse
@@ -46,8 +46,8 @@ namespace MarketDataService.Services
             string currencyPair = "btceur";
             string url = $"https://www.bitstamp.net/api/v2/ohlc/{currencyPair}";
 
-            DateTime start = new DateTime(2020, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-            DateTime end = new DateTime(2020, 1, 1, 23, 59, 59, DateTimeKind.Utc);
+            DateTime start = new DateTime(2021, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            DateTime end = new DateTime(2021, 1, 1, 23, 59, 59, DateTimeKind.Utc);
 
             List<int> dates = new List<int>();
 
@@ -90,17 +90,17 @@ namespace MarketDataService.Services
                     var dataResponse = JsonConvert.DeserializeObject<DataResponse>(data);
                     var ohlcResponse = dataResponse?.Data;
 
-                    if(ohlcResponse?.Data == null)
+                    if(ohlcResponse?.Ohlc == null)
                     {
                         Console.WriteLine($"No data for {first}-{last}");
                         continue;
                     }
 
-                    foreach(var ohlcData in ohlcResponse.Data)
+                    foreach(var ohlcData in ohlcResponse.Ohlc)
                     {
                         ohlcData.Pair = ohlcResponse.Pair;
                     }
-                    masterData.AddRange(ohlcResponse.Data);
+                    masterData.AddRange(ohlcResponse.Ohlc);
                 }
 
                 var historicalDataList = new HistoricalDataList

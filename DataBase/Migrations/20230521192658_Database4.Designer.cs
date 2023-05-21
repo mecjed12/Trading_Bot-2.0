@@ -3,6 +3,7 @@ using System;
 using DataBase.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataBase.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    partial class DataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230521192658_Database4")]
+    partial class Database4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,6 +83,10 @@ namespace DataBase.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("timeStamp");
 
+                    b.Property<int>("TradingPairId")
+                        .HasColumnType("integer")
+                        .HasColumnName("tradingPairId");
+
                     b.Property<decimal>("Volume")
                         .HasColumnType("numeric")
                         .HasColumnName("volume");
@@ -87,6 +94,8 @@ namespace DataBase.Migrations
                     b.HasKey("ItemId");
 
                     b.HasIndex("ListId");
+
+                    b.HasIndex("TradingPairId");
 
                     b.ToTable("historiacalDataItems");
                 });
@@ -117,6 +126,20 @@ namespace DataBase.Migrations
                     b.ToTable("Historicaldatalist");
                 });
 
+            modelBuilder.Entity("DataBase.DataContext.Tables.TradingPair", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.HasKey("Id");
+
+                    b.ToTable("tradingPair");
+                });
+
             modelBuilder.Entity("DataBase.DataContext.Tables.HistoricalDataItems", b =>
                 {
                     b.HasOne("DataBase.DataContext.Tables.HistoricalDataList", "List")
@@ -125,7 +148,15 @@ namespace DataBase.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DataBase.DataContext.Tables.TradingPair", "TradingPair")
+                        .WithMany()
+                        .HasForeignKey("TradingPairId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("List");
+
+                    b.Navigation("TradingPair");
                 });
 
             modelBuilder.Entity("DataBase.DataContext.Tables.HistoricalDataList", b =>
