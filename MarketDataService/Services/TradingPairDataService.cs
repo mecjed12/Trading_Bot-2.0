@@ -1,6 +1,7 @@
 ﻿using DataBase.DataContext;
 using DataBase.DataContext.Tables;
 using Microsoft.AspNetCore.WebUtilities;
+using System.Globalization;
 
 namespace MarketDataService.Services
 {
@@ -26,7 +27,7 @@ namespace MarketDataService.Services
             public string? Description { get; set; }
         }
 
-        public async async CollectTradingpairData()
+        public async Task CollectTradingpairDataAsync()
         {
             string url = "https://www.bitstamp.net/api/v2/trading-pairs-info/";
 
@@ -47,8 +48,26 @@ namespace MarketDataService.Services
 
                 var tradingPairDataList = new TradingPairDataList
                 {
-                    Datasize = masterData.Count;
-                }
+                    Datasize = masterData.Count
+                };
+
+                var tradingPairItems = masterData.Select(o => new TradingPairDataItems
+                {
+                    Name = o.Name,
+                    UrlSymbol = o.UrlSymblo,
+                    BaseDecimals = decimal.Parse(o.BaseDecimals, CultureInfo.InvariantCulture),
+                    CounterDecimals = decimal.Parse(o.CounterDecimals, CultureInfo.InvariantCulture),
+                    InstantorderCounterDecimals = decimal.Parse(o.InstantOrderCounterDecimals, CultureInfo.InvariantCulture),
+                    MinimumOrder = decimal.Parse(o.MinimumOrder, CultureInfo.InvariantCulture),
+                    TradingEngine = o.TradingEngine,
+                    InstantAndMarketOrders = o.InstantAndMarketOrders,
+                    Description = o.Description,
+                    List = tradingPairDataList,
+                });
+                
+                tradingPairDataList.Items = tradingPairItems.ToList();
+
+                await _context.SaveChangesAsync();
             }
         }
 
