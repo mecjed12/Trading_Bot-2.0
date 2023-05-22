@@ -60,20 +60,31 @@ namespace MarketDataService.Services
                 {
                     Name = o.Name,
                     UrlSymbol = o.UrlSymblo,
-                    BaseDecimals = decimal.Parse(o.BaseDecimals ?? "0", CultureInfo.InvariantCulture),
-                    CounterDecimals = decimal.Parse(o.CounterDecimals ?? "0", CultureInfo.InvariantCulture),
-                    InstantorderCounterDecimals = decimal.Parse(o.InstantOrderCounterDecimals ?? "0", CultureInfo.InvariantCulture),
-                    MinimumOrder = decimal.Parse(o.MinimumOrder ?? "0", CultureInfo.InvariantCulture),
+                    BaseDecimals = SafeDecimalParse(o.BaseDecimals),
+                    CounterDecimals = SafeDecimalParse(o.CounterDecimals),
+                    InstantorderCounterDecimals = SafeDecimalParse(o.InstantOrderCounterDecimals),
+                    MinimumOrder = SafeDecimalParse(o.MinimumOrder),
                     TradingEngine = o.TradingEngine,
                     InstantAndMarketOrders = o.InstantAndMarketOrders,
                     Description = o.Description,
                     List = tradingPairDataList,
-                });
-                
+                }).ToList();
+
                 tradingPairDataList.Items = tradingPairItems.ToList();
 
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public static decimal SafeDecimalParse(string? value)
+        {
+            if (string.IsNullOrEmpty(value))
+                return 0;
+
+            if (decimal.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out var result))
+                return result;
+
+            return 0;
         }
     }
 }
