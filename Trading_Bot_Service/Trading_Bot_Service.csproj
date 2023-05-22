@@ -24,4 +24,9 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BackTesting_Service\BackTesting_Service.csproj" />
+    <ProjectReference Include="..\DataBase\DataBase.csproj" />
+  </ItemGroup>
+
 </Project>

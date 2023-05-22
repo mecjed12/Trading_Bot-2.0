@@ -6,10 +6,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Configuration.AddJsonFile("C:\\Users\\aco podgorac\\source\\repos\\Trading_Bot\\DataBase\\appsettings.json");
+//builder.Configuration.AddJsonFile("C:\\Users\\aco podgorac\\source\\repos\\Trading_Bot\\DataBase\\appsettings.json");
+builder.Configuration.AddJsonFile("C:\\Users\\Aleksander\\source\\repos\\Trading_Bot-2.0\\DataBase\\appsettings.json");
 
 builder.Services.AddDbContext<DataBaseContext>(
-          o => o.UseNpgsql(builder.Configuration.GetConnectionString("TradingDataBase")));
+          o => o.UseNpgsql(builder.Configuration.GetConnectionString("TradingDataBaseExterned")));
 
 builder.Services.AddScoped<IHistoricalDataService, HistoricalDataService>();
 builder.Services.AddScoped<IDataBaseContext, DataBaseContext>();

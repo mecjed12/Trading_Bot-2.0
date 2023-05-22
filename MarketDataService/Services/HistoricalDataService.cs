@@ -41,7 +41,7 @@ namespace MarketDataService.Services
             public OhlcResponse? Data { get; set; }
         }
 
-        public async Task ScrapTheHistoricalData()
+        public async Task<List<OhlcData>> ScrapTheHistoricalData(bool saveToDb)
         {
             string currencyPair = "btceur";
             string url = $"https://www.bitstamp.net/api/v2/ohlc/{currencyPair}";
@@ -123,10 +123,51 @@ namespace MarketDataService.Services
 
                 historicalDataList.DataSets = historicalDataItems.ToList();
 
-                _context.HistoricalData.Add(historicalDataList);
+                if(saveToDb)
+                {
+                    _context.HistoricalData.Add(historicalDataList);
+                    await _context.SaveChangesAsync();
+                }
+                return masterData;
+            }
+        }
 
+        public void OutputDataAsCsv (List<OhlcData> masterData)
+        {
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("C:\\Users\\Aleksander\\source\\repos\\Trading_Bot-2.0\\DataBase\\appsettings.json", optional: true, reloadOnChange: true);
+
+            var configuration = builder.Build();
+            var historicalDataFolderPath = configuration["AppSettings:HistoricalDataFolderPath"];
+
+            Console.WriteLine("Name for the File");
+            var historicalDataCsv = Console.ReadLine();
+            var path = Path.Combine(historicalDataFolderPath, historicalDataCsv + ".csv");
+
+            using var writer = new StreamWriter(path);
+            writer.WriteLine("Pair,Timestamp,Open,High,Low,Close,Volume");
+
+            foreach(var data in masterData)
+            {
+                writer.WriteLine($"{data.Pair},{data.Timestamp},{data.Open},{data.High},{data.Low},{data.Close}, {data.Volume}");
+            }
+        }
+
+        public async Task DeleteHistoricalDataSetAsync(int id)
+        {
+            var dataset = _context.HistoricalData.Where(o => o.ListId.Equals(id)).FirstOrDefault();
+            if (dataset != null)
+            {
+                _context.HistoricalData.Remove(dataset);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task CreateAndSaveCsvData()
+        {
+            var masterData = await ScrapTheHistoricalData(false);
+            OutputDataAsCsv(masterData);
         }
     }
 }

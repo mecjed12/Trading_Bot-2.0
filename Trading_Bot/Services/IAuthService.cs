@@ -4,6 +4,6 @@
     {
         Task RegisterAsync(string usernmae, string password);
         Task<string> Login(string username, string password);
-
+        void DeleteUser(int id);
     }
 }

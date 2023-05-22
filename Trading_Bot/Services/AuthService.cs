@@ -1,5 +1,6 @@
 ﻿using AuthenticationService.Helper;
 using AuthenticationService.Modells;
+using DataBase.DataContext;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -13,12 +14,14 @@ namespace AuthenticationService.Services
         private readonly IUserRepository _userRepository;
         private readonly IPaswordService _paswordService;
         private readonly AppSettings _config;
+        private readonly IDataBaseContext _dataBaseContext;
 
-        public AuthService(IUserRepository userRepository, IPaswordService paswordService,IOptions<AppSettings> appSettings)
+        public AuthService(IUserRepository userRepository, IPaswordService paswordService,IOptions<AppSettings> appSettings,IDataBaseContext dataBaseContext)
         {
             _userRepository = userRepository;
             _paswordService = paswordService;
             _config = appSettings.Value;
+            _dataBaseContext = dataBaseContext;
         }
 
         public async Task RegisterAsync(string usernmae, string password)
@@ -66,6 +69,16 @@ namespace AuthenticationService.Services
             };
             var token = tokenHandler.CreateToken(tokenDecriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        public void DeleteUser(int id)
+        {
+            var user = _dataBaseContext.users.Where(o => o.Id.Equals(id)).FirstOrDefault();
+            if(user != null)
+            {
+                _dataBaseContext.users.Remove(user);
+                _dataBaseContext.SaveChanges();
+            }
         }
     }
 }

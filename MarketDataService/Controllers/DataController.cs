@@ -1,4 +1,5 @@
 ﻿using DataBase.DataContext;
+using DataBase.Helper;
 using MarketDataService.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,8 +38,31 @@ namespace MarketDataService.Controllers
         [HttpPost("collectdata")]
         public async Task<IActionResult> CollectHistoricalData()
         {
-            await _dataHistoricalDataService.ScrapTheHistoricalData();
-            return Ok();
+            try
+            {
+                ResponseType responseType = ResponseType.Success;
+                await _dataHistoricalDataService.ScrapTheHistoricalData(true);
+                return Ok(ResponseHandler.GetApiResponse(responseType, "Collected Complete"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ResponseHandler.GetExceptionResponse(ex));
+            }
+        }
+
+        [HttpPost("collectdataAndSaveAsCsv")]
+        public async Task<IActionResult> SaveHistoricalDataAsCsv()
+        {
+            try
+            {
+                ResponseType responseType = ResponseType.Success;
+                await _dataHistoricalDataService.CreateAndSaveCsvData();
+                return Ok(ResponseHandler.GetApiResponse(responseType, "Successfully Create CsvFile"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ResponseHandler.GetExceptionResponse(ex));
+            }
         }
 
         // PUT api/<DataController>/5
@@ -48,9 +72,19 @@ namespace MarketDataService.Controllers
         }
 
         // DELETE api/<DataController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("deleteHistoricalDataSet/{id}")]
+        public async Task<IActionResult> DeleteHistoricalDataSet(int id)
         {
+            try
+            {
+                ResponseType responseType = ResponseType.Success;
+                await _dataHistoricalDataService.DeleteHistoricalDataSetAsync(id);
+                return Ok(ResponseHandler.GetApiResponse(responseType, "Delete the dataset successfully"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ResponseHandler.GetExceptionResponse(ex));
+            }
         }
     }
 }
