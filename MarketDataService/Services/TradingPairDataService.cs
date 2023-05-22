@@ -1,11 +1,12 @@
 ﻿using DataBase.DataContext;
 using DataBase.DataContext.Tables;
 using Microsoft.AspNetCore.WebUtilities;
+using Newtonsoft.Json;
 using System.Globalization;
 
 namespace MarketDataService.Services
 {
-    public class TradingPairDataService
+    public class TradingPairDataService : ITradingPairDataServicecs
     {
         private readonly IDataBaseContext _context;
 
@@ -44,6 +45,8 @@ namespace MarketDataService.Services
 
                 var data = await response.Content.ReadAsStringAsync();
 
+                masterData = JsonConvert.DeserializeObject<List<TradingPairData>>(data);
+
                 Console.WriteLine($"{data}");
 
                 var tradingPairDataList = new TradingPairDataList
@@ -51,14 +54,16 @@ namespace MarketDataService.Services
                     Datasize = masterData.Count
                 };
 
+                _context.TradingPairs.Add( tradingPairDataList );
+
                 var tradingPairItems = masterData.Select(o => new TradingPairDataItems
                 {
                     Name = o.Name,
                     UrlSymbol = o.UrlSymblo,
-                    BaseDecimals = decimal.Parse(o.BaseDecimals, CultureInfo.InvariantCulture),
-                    CounterDecimals = decimal.Parse(o.CounterDecimals, CultureInfo.InvariantCulture),
-                    InstantorderCounterDecimals = decimal.Parse(o.InstantOrderCounterDecimals, CultureInfo.InvariantCulture),
-                    MinimumOrder = decimal.Parse(o.MinimumOrder, CultureInfo.InvariantCulture),
+                    BaseDecimals = decimal.Parse(o.BaseDecimals ?? "0", CultureInfo.InvariantCulture),
+                    CounterDecimals = decimal.Parse(o.CounterDecimals ?? "0", CultureInfo.InvariantCulture),
+                    InstantorderCounterDecimals = decimal.Parse(o.InstantOrderCounterDecimals ?? "0", CultureInfo.InvariantCulture),
+                    MinimumOrder = decimal.Parse(o.MinimumOrder ?? "0", CultureInfo.InvariantCulture),
                     TradingEngine = o.TradingEngine,
                     InstantAndMarketOrders = o.InstantAndMarketOrders,
                     Description = o.Description,
@@ -70,6 +75,5 @@ namespace MarketDataService.Services
                 await _context.SaveChangesAsync();
             }
         }
-
     }
 }

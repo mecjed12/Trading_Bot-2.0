@@ -6,6 +6,7 @@ namespace DataBase.DataContext.Tables
     [Table("TradingPairList")]
     public class TradingPairDataList
     {
+        [Key]
         [Column("id")]
         public int ListId { get; set; }
 

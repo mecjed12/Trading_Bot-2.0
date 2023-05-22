@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<DataBaseContext>(
-          o => o.UseNpgsql(builder.Configuration.GetConnectionString("TradingDataBaseExterned")));
+          o => o.UseNpgsql(builder.Configuration.GetConnectionString("TradingDataBase")));
 
 
 builder.Services.AddControllers();

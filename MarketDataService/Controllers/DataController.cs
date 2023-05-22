@@ -13,11 +13,13 @@ namespace MarketDataService.Controllers
     {
         private readonly DataBaseContext _dataBaseContext;
         private readonly IHistoricalDataService _dataHistoricalDataService;
+        private readonly ITradingPairDataServicecs _tradingPairDataServicecs;
 
-        public DataController(DataBaseContext dataBaseContext, IHistoricalDataService dataHistoricalDataService)
+        public DataController(DataBaseContext dataBaseContext, IHistoricalDataService dataHistoricalDataService, ITradingPairDataServicecs tradingPairDataServicecs)
         {
             _dataBaseContext = dataBaseContext;
             _dataHistoricalDataService = dataHistoricalDataService;
+            _tradingPairDataServicecs = tradingPairDataServicecs;
         }
 
         // GET: api/<DataController>
@@ -34,8 +36,23 @@ namespace MarketDataService.Controllers
             return "value";
         }
 
+        [HttpPost("collectTradingPairdata")]
+        public async Task<IActionResult> CollectTradingpairData()
+        {
+            try
+            {
+                ResponseType responseType = ResponseType.Success;
+                await _tradingPairDataServicecs.CollectTradingpairDataAsync();
+                return Ok(ResponseHandler.GetApiResponse(responseType, "Collected Complete"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ResponseHandler.GetExceptionResponse(ex));
+            }
+        }
+
         // POST api/<DataController>
-        [HttpPost("collectdata")]
+        [HttpPost("collectHistoricaldata")]
         public async Task<IActionResult> CollectHistoricalData()
         {
             try
