@@ -3,6 +3,7 @@ using System;
 using DataBase.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataBase.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    partial class DataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230523105908_NewDatabase5")]
+    partial class NewDatabase5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -117,7 +120,7 @@ namespace DataBase.Migrations
                     b.ToTable("Historicaldatalist");
                 });
 
-            modelBuilder.Entity("DataBase.DataContext.Tables.TickerDayDataItems", b =>
+            modelBuilder.Entity("DataBase.DataContext.Tables.TickerDataItems", b =>
                 {
                     b.Property<int>("ItemId")
                         .ValueGeneratedOnAdd()
@@ -156,10 +159,6 @@ namespace DataBase.Migrations
                     b.Property<decimal>("Open24")
                         .HasColumnType("numeric")
                         .HasColumnName("open_24");
-
-                    b.Property<string>("Pair")
-                        .HasColumnType("text")
-                        .HasColumnName("pair");
 
                     b.Property<decimal>("PercentChange24")
                         .HasColumnType("numeric")
@@ -184,12 +183,12 @@ namespace DataBase.Migrations
                     b.ToTable("tickerDataItems");
                 });
 
-            modelBuilder.Entity("DataBase.DataContext.Tables.TickerDayDataList", b =>
+            modelBuilder.Entity("DataBase.DataContext.Tables.TickerDataList", b =>
                 {
                     b.Property<int>("ListId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
-                        .HasColumnName("Id");
+                        .HasColumnName("listId");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ListId"));
 
@@ -197,102 +196,21 @@ namespace DataBase.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("datasize");
 
-                    b.Property<DateTime>("Timestamp")
+                    b.Property<string>("Name")
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<DateTime>("Timestampend")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnName("timestamp");
+                        .HasColumnName("timestampend");
+
+                    b.Property<DateTime>("Timestampstart")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("timestampstart");
 
                     b.HasKey("ListId");
 
                     b.ToTable("tickerDataList");
-                });
-
-            modelBuilder.Entity("DataBase.DataContext.Tables.TickerHourDataItems", b =>
-                {
-                    b.Property<int>("ItemId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ItemId"));
-
-                    b.Property<decimal>("Ask")
-                        .HasColumnType("numeric")
-                        .HasColumnName("lowest_sell_order");
-
-                    b.Property<decimal>("Bid")
-                        .HasColumnType("numeric")
-                        .HasColumnName("highest_buy_order");
-
-                    b.Property<decimal>("HighestPrice")
-                        .HasColumnType("numeric")
-                        .HasColumnName("highestPrice");
-
-                    b.Property<decimal>("LastPrice")
-                        .HasColumnType("numeric")
-                        .HasColumnName("lastprice");
-
-                    b.Property<int>("ListId")
-                        .HasColumnType("integer");
-
-                    b.Property<decimal>("LowestPrice")
-                        .HasColumnType("numeric")
-                        .HasColumnName("lowestPrice");
-
-                    b.Property<decimal>("Open")
-                        .HasColumnType("numeric")
-                        .HasColumnName("first_price_of_day");
-
-                    b.Property<decimal>("Open24")
-                        .HasColumnType("numeric")
-                        .HasColumnName("open_24");
-
-                    b.Property<string>("Pair")
-                        .HasColumnType("text")
-                        .HasColumnName("pair");
-
-                    b.Property<decimal>("PercentChange24")
-                        .HasColumnType("numeric")
-                        .HasColumnName("percent_change_24");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("timestamp");
-
-                    b.Property<decimal>("VWap")
-                        .HasColumnType("numeric")
-                        .HasColumnName("volume_weighted_average_price");
-
-                    b.Property<decimal>("Volume")
-                        .HasColumnType("numeric")
-                        .HasColumnName("volume");
-
-                    b.HasKey("ItemId");
-
-                    b.HasIndex("ListId");
-
-                    b.ToTable("tickerHourDataItems");
-                });
-
-            modelBuilder.Entity("DataBase.DataContext.Tables.TickerHourDataList", b =>
-                {
-                    b.Property<int>("ListId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("Id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ListId"));
-
-                    b.Property<long>("DataSize")
-                        .HasColumnType("bigint")
-                        .HasColumnName("datasize");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("timestamp");
-
-                    b.HasKey("ListId");
-
-                    b.ToTable("tickerHourDataList");
                 });
 
             modelBuilder.Entity("DataBase.DataContext.Tables.HistoricalDataItems", b =>
@@ -306,21 +224,10 @@ namespace DataBase.Migrations
                     b.Navigation("List");
                 });
 
-            modelBuilder.Entity("DataBase.DataContext.Tables.TickerDayDataItems", b =>
+            modelBuilder.Entity("DataBase.DataContext.Tables.TickerDataItems", b =>
                 {
-                    b.HasOne("DataBase.DataContext.Tables.TickerDayDataList", "List")
-                        .WithMany("TickerDayDataItems")
-                        .HasForeignKey("ListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("List");
-                });
-
-            modelBuilder.Entity("DataBase.DataContext.Tables.TickerHourDataItems", b =>
-                {
-                    b.HasOne("DataBase.DataContext.Tables.TickerHourDataList", "List")
-                        .WithMany("TickerHourDataItems")
+                    b.HasOne("DataBase.DataContext.Tables.TickerDataList", "List")
+                        .WithMany("TickerDataItems")
                         .HasForeignKey("ListId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -333,14 +240,9 @@ namespace DataBase.Migrations
                     b.Navigation("DataSets");
                 });
 
-            modelBuilder.Entity("DataBase.DataContext.Tables.TickerDayDataList", b =>
+            modelBuilder.Entity("DataBase.DataContext.Tables.TickerDataList", b =>
                 {
-                    b.Navigation("TickerDayDataItems");
-                });
-
-            modelBuilder.Entity("DataBase.DataContext.Tables.TickerHourDataList", b =>
-                {
-                    b.Navigation("TickerHourDataItems");
+                    b.Navigation("TickerDataItems");
                 });
 #pragma warning restore 612, 618
         }

@@ -11,20 +11,48 @@ namespace MarketDataService.Controllers
     [ApiController]
     public class DataController : ControllerBase
     {
-        private readonly DataBaseContext _dataBaseContext;
         private readonly IHistoricalDataService _dataHistoricalDataService;
+        private readonly ITickerDayDataService _tickerDayDataService;
+        private readonly ITickerHourDataService _tickerHourDataService;
 
-        public DataController(DataBaseContext dataBaseContext, IHistoricalDataService dataHistoricalDataService)
+        public DataController(IHistoricalDataService dataHistoricalDataService,ITickerDayDataService tickerDataService,ITickerHourDataService tickerHourDataService)
         {
-            _dataBaseContext = dataBaseContext;
             _dataHistoricalDataService = dataHistoricalDataService;
+            _tickerDayDataService = tickerDataService;
+            _tickerHourDataService = tickerHourDataService;
         }
 
         // GET: api/<DataController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpPost("collectTickerDaydata")]
+        public async Task<IActionResult> CollectTickerDayData()
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                ResponseType responseType = ResponseType.Success;
+                await _tickerDayDataService.CollectingTickerDayDataAsync();
+                return Ok(ResponseHandler.GetApiResponse(responseType, "Collect Successfully"));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest(ResponseHandler.GetExceptionResponse(ex));
+            }
+        }
+
+        [HttpPost("collectTickerHourdata")]
+        public async Task<IActionResult> CollectTickerHourData()
+        {
+            try
+            {
+                ResponseType responseType = ResponseType.Success;
+                await _tickerHourDataService.CollectingTickerHourDataAsync();
+                return Ok(ResponseHandler.GetApiResponse(responseType, "Collect Successfully"));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest(ResponseHandler.GetExceptionResponse(ex));
+            }
         }
 
         // GET api/<DataController>/5
@@ -35,7 +63,7 @@ namespace MarketDataService.Controllers
         }
 
         // POST api/<DataController>
-        [HttpPost("collectdata")]
+        [HttpPost("collectHistoricaldata")]
         public async Task<IActionResult> CollectHistoricalData()
         {
             try

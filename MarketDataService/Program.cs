@@ -14,6 +14,8 @@ builder.Services.AddDbContext<DataBaseContext>(
 
 builder.Services.AddScoped<IHistoricalDataService, HistoricalDataService>();
 builder.Services.AddScoped<IDataBaseContext, DataBaseContext>();
+builder.Services.AddScoped<ITickerDayDataService, TickerDayDataService>();
+builder.Services.AddScoped<ITickerHourDataService, TickerHourDataService>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
