@@ -22,8 +22,6 @@ namespace DataBase.DataContext.Tables
         public virtual ICollection<HistoricalDataItems>? DataSets { get; set; }
     }
     
-
-
     [Table("historiacalDataItems")]
     public class HistoricalDataItems
     {

@@ -12,7 +12,8 @@ namespace DataBase.DataContext
         
         public DbSet<DBUser> users { get; set; }
         public DbSet<HistoricalDataList> HistoricalData { get; set; }
-        public DbSet<TradingPairDataList> TradingPairs { get; set; }
+        public DbSet<TickerDayDataList> TickerDayData { get; set; }
+        public DbSet<TickerHourDataList> TickerHourData { get; set; }
 
         public int SaveChanges()
         {

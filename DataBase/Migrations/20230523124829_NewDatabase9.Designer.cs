@@ -3,6 +3,7 @@ using System;
 using DataBase.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataBase.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    partial class DataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230523124829_NewDatabase9")]
+    partial class NewDatabase9
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -245,10 +248,6 @@ namespace DataBase.Migrations
                     b.Property<decimal>("Open24")
                         .HasColumnType("numeric")
                         .HasColumnName("open_24");
-
-                    b.Property<string>("Pair")
-                        .HasColumnType("text")
-                        .HasColumnName("pair");
 
                     b.Property<decimal>("PercentChange24")
                         .HasColumnType("numeric")

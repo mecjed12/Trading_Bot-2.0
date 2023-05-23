@@ -7,7 +7,8 @@ namespace DataBase.DataContext
     {
         DbSet<DBUser> users { get; set; }
         DbSet<HistoricalDataList> HistoricalData { get; set; }
-        DbSet<TradingPairDataList> TradingPairs { get; set; }
+        DbSet<TickerDayDataList> TickerDayData { get; set; }
+        DbSet<TickerHourDataList> TickerHourData { get; set; }
 
         int SaveChanges();
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
