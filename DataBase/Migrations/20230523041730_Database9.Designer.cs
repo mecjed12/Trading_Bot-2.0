@@ -3,6 +3,7 @@ using System;
 using DataBase.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataBase.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    partial class DataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230523041730_Database9")]
+    partial class Database9
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,12 +129,12 @@ namespace DataBase.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BaseDecimals")
-                        .HasColumnType("integer")
+                    b.Property<decimal>("BaseDecimals")
+                        .HasColumnType("numeric")
                         .HasColumnName("base_decimals");
 
-                    b.Property<int>("CounterDecimals")
-                        .HasColumnType("integer")
+                    b.Property<decimal>("CounterDecimals")
+                        .HasColumnType("numeric")
                         .HasColumnName("counter_decimals");
 
                     b.Property<string>("Description")
@@ -142,8 +145,8 @@ namespace DataBase.Migrations
                         .HasColumnType("text")
                         .HasColumnName("instant_and_market_orders");
 
-                    b.Property<int>("InstantorderCounterDecimals")
-                        .HasColumnType("integer")
+                    b.Property<decimal>("InstantorderCounterDecimals")
+                        .HasColumnType("numeric")
                         .HasColumnName("instant_order_counter_decimals");
 
                     b.Property<int>("ListId")
@@ -157,7 +160,7 @@ namespace DataBase.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<string>("Trading")
+                    b.Property<string>("TradingEngine")
                         .HasColumnType("text")
                         .HasColumnName("trading");
 

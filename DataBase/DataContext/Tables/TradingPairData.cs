@@ -33,19 +33,19 @@ namespace DataBase.DataContext.Tables
         public string? UrlSymbol { get; set; }
 
         [Column("base_decimals")]
-        public decimal BaseDecimals { get; set; }
+        public int BaseDecimals { get; set; }
 
         [Column("counter_decimals")]
-        public decimal CounterDecimals { get; set; }
+        public int CounterDecimals { get; set; }
 
         [Column("instant_order_counter_decimals")]
-        public decimal InstantorderCounterDecimals { get; set; }
+        public int InstantorderCounterDecimals { get; set; }
 
         [Column("minimum_order")]
-        public decimal MinimumOrder { get; set; }
+        public string? MinimumOrder { get; set; }
 
         [Column("trading")]
-        public string? TradingEngine { get; set; }
+        public string? Trading { get; set; }
 
         [Column("instant_and_market_orders")]
         public string? InstantAndMarketOrders { get; set; }

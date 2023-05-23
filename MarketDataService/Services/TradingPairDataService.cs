@@ -18,12 +18,12 @@ namespace MarketDataService.Services
         public class TradingPairData
         {
             public string? Name { get; set; }
-            public string? UrlSymblo { get; set; }
+            public string? UrlSymbol { get; set; }
             public string? BaseDecimals { get; set; }
             public string? CounterDecimals { get; set; }
             public string? InstantOrderCounterDecimals { get; set; }
             public string? MinimumOrder { get; set; }
-            public string? TradingEngine { get; set; }
+            public string? Trading { get; set; }
             public string? InstantAndMarketOrders { get; set; }
             public string? Description { get; set; }
         }
@@ -59,12 +59,12 @@ namespace MarketDataService.Services
                 var tradingPairItems = masterData.Select(o => new TradingPairDataItems
                 {
                     Name = o.Name,
-                    UrlSymbol = o.UrlSymblo,
+                    UrlSymbol = o.UrlSymbol,
                     BaseDecimals = SafeDecimalParse(o.BaseDecimals),
                     CounterDecimals = SafeDecimalParse(o.CounterDecimals),
                     InstantorderCounterDecimals = SafeDecimalParse(o.InstantOrderCounterDecimals),
-                    MinimumOrder = SafeDecimalParse(o.MinimumOrder),
-                    TradingEngine = o.TradingEngine,
+                    MinimumOrder = o.MinimumOrder,
+                    Trading = o.Trading,
                     InstantAndMarketOrders = o.InstantAndMarketOrders,
                     Description = o.Description,
                     List = tradingPairDataList,
@@ -76,12 +76,12 @@ namespace MarketDataService.Services
             }
         }
 
-        public static decimal SafeDecimalParse(string? value)
+        public static int SafeDecimalParse(string? value)
         {
             if (string.IsNullOrEmpty(value))
                 return 0;
 
-            if (decimal.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out var result))
+            if (int.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out var result))
                 return result;
 
             return 0;
