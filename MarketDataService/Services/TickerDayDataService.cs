@@ -108,5 +108,15 @@ namespace MarketDataService.Services
                 }
             }
         }
+
+        public async Task DeleteTickerDayDataSetAsync(int id)
+        {
+            var dataset = _context.TickerDayData.Where(o => o.ListId.Equals(id)).FirstOrDefault();
+            if (dataset != null)
+            {
+                _context.TickerDayData.Remove(dataset);
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

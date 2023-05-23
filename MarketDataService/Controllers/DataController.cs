@@ -114,5 +114,35 @@ namespace MarketDataService.Controllers
                 return BadRequest(ResponseHandler.GetExceptionResponse(ex));
             }
         }
+
+        [HttpDelete("deleteTickerDayDataset/{id}")]
+        public async Task<IActionResult> DeleteTickerDayDataset(int id)
+        {
+            try
+            {
+                ResponseType responseType = ResponseType.Success;
+                await _tickerDayDataService.DeleteTickerDayDataSetAsync(id);
+                return Ok(ResponseHandler.GetApiResponse(responseType, "Delete the dataset successfully"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ResponseHandler.GetExceptionResponse(ex));
+            }
+        }
+
+        [HttpDelete("deleteTickerHourDataSet/{id}")]
+        public async Task<IActionResult> DeleteTickerHourDataSet(int id)
+        {
+            try
+            {
+                ResponseType responseType = ResponseType.Success;
+                await _tickerHourDataService.DeleteTickerHourDataSetAsync(id);
+                return Ok(ResponseHandler.GetApiResponse(responseType, "Delete the dataset successfully"));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ResponseHandler.GetExceptionResponse(ex));
+            }
+        }
     }
 }
