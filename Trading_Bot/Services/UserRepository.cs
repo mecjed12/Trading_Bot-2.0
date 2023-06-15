@@ -24,13 +24,13 @@ namespace AuthenticationService.Services
                 PasswordSalt = user.PasswordSalt,
             };
 
-            _context.users.Add(dbUser);
+            _context.Users.Add(dbUser);
             await _context.SaveChangesAsync();
         }
 
         public async Task<Users> GetUSerByUsername(string username)
         {
-            var dbUser = await _context.users.SingleOrDefaultAsync(o => o.UserName == username);
+            var dbUser = await _context.Users.SingleOrDefaultAsync(o => o.UserName == username);
             if(dbUser == null)
             {
                 return null;

@@ -73,10 +73,10 @@ namespace AuthenticationService.Services
 
         public void DeleteUser(int id)
         {
-            var user = _dataBaseContext.users.Where(o => o.Id.Equals(id)).FirstOrDefault();
+            var user = _dataBaseContext.Users.Where(o => o.Id.Equals(id)).FirstOrDefault();
             if(user != null)
             {
-                _dataBaseContext.users.Remove(user);
+                _dataBaseContext.Users.Remove(user);
                 _dataBaseContext.SaveChanges();
             }
         }

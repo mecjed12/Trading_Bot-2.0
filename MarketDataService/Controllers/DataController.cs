@@ -2,6 +2,7 @@
 using DataBase.Helper;
 using MarketDataService.Services;
 using Microsoft.AspNetCore.Mvc;
+using QuantConnect;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,13 +15,33 @@ namespace MarketDataService.Controllers
         private readonly IHistoricalDataService _dataHistoricalDataService;
         private readonly ITickerDayDataService _tickerDayDataService;
         private readonly ITickerHourDataService _tickerHourDataService;
+        private readonly IHystoricalCryptoDataService _hystoricalCryptoDataService;
 
-        public DataController(IHistoricalDataService dataHistoricalDataService,ITickerDayDataService tickerDataService,ITickerHourDataService tickerHourDataService)
+        public DataController(IHistoricalDataService dataHistoricalDataService,ITickerDayDataService tickerDataService, ITickerHourDataService tickerHourDataService, IHystoricalCryptoDataService hystoricalCryptoDataService)
         {
             _dataHistoricalDataService = dataHistoricalDataService;
             _tickerDayDataService = tickerDataService;
             _tickerHourDataService = tickerHourDataService;
+            _hystoricalCryptoDataService = hystoricalCryptoDataService;
         }
+
+
+        [HttpPost("collectionCryptoData")]
+        public async Task<IActionResult> CollectHistoricalCryptoData()
+        {
+            try
+            {
+                ResponseType responseType = ResponseType.Success;
+                await _hystoricalCryptoDataService.FetchAndSaveHistoricalData("BTCUSD", Resolution.Daily, new DateTime(2020,1,1), new DateTime(2020,1,3));
+                return Ok(ResponseHandler.GetApiResponse(responseType, "Collect Successfully"));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return BadRequest(ResponseHandler.GetExceptionResponse(ex));
+            }
+        }
+
 
         // GET: api/<DataController>
         [HttpPost("collectTickerDaydata")]

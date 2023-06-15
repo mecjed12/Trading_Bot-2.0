@@ -5,8 +5,9 @@ namespace DataBase.DataContext
 {
     public interface IDataBaseContext
     {
-        DbSet<DBUser> users { get; set; }
+        DbSet<DBUser> Users { get; set; }
         DbSet<HistoricalDataList> HistoricalData { get; set; }
+        DbSet<HystoriaclCryptoDataList> HystoricalCryptoData { get; set; }
         DbSet<TickerDayDataList> TickerDayData { get; set; }
         DbSet<TickerHourDataList> TickerHourData { get; set; }
 

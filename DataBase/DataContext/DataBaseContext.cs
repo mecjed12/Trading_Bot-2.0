@@ -10,8 +10,10 @@ namespace DataBase.DataContext
         { }
 
         
-        public DbSet<DBUser> users { get; set; }
+        public DbSet<DBUser> Users { get; set; }
         public DbSet<HistoricalDataList> HistoricalData { get; set; }
+        public DbSet<HystoriaclCryptoDataList> HystoricalCryptoData { get; set; }
+        public DbSet<HystoricalCryptoDataItems> HystoricalCryptoDataItems { get; set; }
         public DbSet<TickerDayDataList> TickerDayData { get; set; }
         public DbSet<TickerHourDataList> TickerHourData { get; set; }
 

@@ -3,6 +3,7 @@ using System;
 using DataBase.DataContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataBase.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    partial class DataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20230615134023_NewDatabase12")]
+    partial class NewDatabase12
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,6 +68,9 @@ namespace DataBase.Migrations
                         .HasColumnType("numeric")
                         .HasColumnName("high");
 
+                    b.Property<int?>("HystoriaclCryptoDataistListId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("ListId")
                         .HasColumnType("integer");
 
@@ -85,6 +91,8 @@ namespace DataBase.Migrations
                         .HasColumnName("volume");
 
                     b.HasKey("ItemId");
+
+                    b.HasIndex("HystoriaclCryptoDataistListId");
 
                     b.HasIndex("ListId");
 
@@ -117,7 +125,7 @@ namespace DataBase.Migrations
                     b.ToTable("Historicaldatalist");
                 });
 
-            modelBuilder.Entity("DataBase.DataContext.Tables.HystoriaclCryptoDataList", b =>
+            modelBuilder.Entity("DataBase.DataContext.Tables.HystoriaclCryptoDataist", b =>
                 {
                     b.Property<int>("ListId")
                         .ValueGeneratedOnAdd()
@@ -143,14 +151,11 @@ namespace DataBase.Migrations
                     b.ToTable("HystoricalCryptoDataList");
                 });
 
-            modelBuilder.Entity("DataBase.DataContext.Tables.HystoricalCryptoDataItems", b =>
+            modelBuilder.Entity("DataBase.DataContext.Tables.HystoricalCryptoData", b =>
                 {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("id"));
+                    b.Property<decimal>("Volume")
+                        .HasColumnType("numeric")
+                        .HasColumnName("Volume");
 
                     b.Property<int>("DataType")
                         .HasColumnType("integer")
@@ -199,11 +204,7 @@ namespace DataBase.Migrations
                         .HasColumnType("numeric")
                         .HasColumnName("Value");
 
-                    b.Property<decimal>("Volume")
-                        .HasColumnType("numeric")
-                        .HasColumnName("Volume");
-
-                    b.HasKey("id");
+                    b.HasKey("Volume");
 
                     b.HasIndex("ListId");
 
@@ -390,6 +391,10 @@ namespace DataBase.Migrations
 
             modelBuilder.Entity("DataBase.DataContext.Tables.HistoricalDataItems", b =>
                 {
+                    b.HasOne("DataBase.DataContext.Tables.HystoriaclCryptoDataist", null)
+                        .WithMany("Datasets")
+                        .HasForeignKey("HystoriaclCryptoDataistListId");
+
                     b.HasOne("DataBase.DataContext.Tables.HistoricalDataList", "List")
                         .WithMany("DataSets")
                         .HasForeignKey("ListId")
@@ -399,10 +404,10 @@ namespace DataBase.Migrations
                     b.Navigation("List");
                 });
 
-            modelBuilder.Entity("DataBase.DataContext.Tables.HystoricalCryptoDataItems", b =>
+            modelBuilder.Entity("DataBase.DataContext.Tables.HystoricalCryptoData", b =>
                 {
-                    b.HasOne("DataBase.DataContext.Tables.HystoriaclCryptoDataList", "List")
-                        .WithMany("Datasets")
+                    b.HasOne("DataBase.DataContext.Tables.HystoriaclCryptoDataist", "List")
+                        .WithMany()
                         .HasForeignKey("ListId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -437,7 +442,7 @@ namespace DataBase.Migrations
                     b.Navigation("DataSets");
                 });
 
-            modelBuilder.Entity("DataBase.DataContext.Tables.HystoriaclCryptoDataList", b =>
+            modelBuilder.Entity("DataBase.DataContext.Tables.HystoriaclCryptoDataist", b =>
                 {
                     b.Navigation("Datasets");
                 });
